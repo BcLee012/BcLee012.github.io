@@ -63,6 +63,7 @@
   <div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
   <header class="site-header">
     <div class="wrap header-inner">
+      <a class="site-title" href="{{ base | append: '/' | relative_url }}">{{ site_name }}</a>
       <nav class="site-nav">
         <a href="{{ base | append: '/' | relative_url }}" {% if page.url == '/' or page.url == '/zh/' %}class="active"{% endif %}>{{ nav_home }}</a>
         <a href="{{ base | append: '/projects/' | relative_url }}" {% if page.url contains '/projects' %}class="active"{% endif %}>{{ nav_projects }}</a>

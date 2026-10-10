@@ -8,6 +8,10 @@ lang: en
   <div class="profile-body">
     <div class="profile-bio">
       <p>I study supply chain operations at Wuhan University's School of Economics and Management — platform pricing, capacity allocation, and information disclosure when consumers behave strategically. Away from research: long-distance running, photography, and music.</p>
+      <div class="profile-links">
+        <a class="button" href="{{ '/research/' | relative_url }}">View research</a>
+        <a class="button button-ghost" href="{{ '/contact/' | relative_url }}">Get in touch</a>
+      </div>
     </div>
     <figure class="profile-photo">
       <img src="{{ site.profile_image | relative_url }}" alt="{{ site.title }}" />
@@ -34,6 +38,7 @@ lang: en
 <section class="section">
   <div class="section-head">
     <h2>Latest posts</h2>
+    <a class="see-all" href="{{ '/thoughts/' | relative_url }}">All posts →</a>
   </div>
   {% include entry-table.html items=site.thoughts lang='en' limit=4 %}
 </section>
@@ -41,6 +46,7 @@ lang: en
 <section class="section">
   <div class="section-head">
     <h2>Selected projects</h2>
+    <a class="see-all" href="{{ '/projects/' | relative_url }}">All projects →</a>
   </div>
   {% include entry-table.html items=site.projects lang='en' limit=3 %}
 </section>

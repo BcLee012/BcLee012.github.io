@@ -1,0 +1,253 @@
+diff --git a/_layouts/default.html b/_layouts/default.html
+index fad3d18..d7ba870 100644
+--- a/_layouts/default.html
++++ b/_layouts/default.html
+@@ -63,6 +63,7 @@
+   <div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
+   <header class="site-header">
+     <div class="wrap header-inner">
++      <a class="site-title" href="{{ base | append: '/' | relative_url }}">{{ site_name }}</a>
+       <nav class="site-nav">
+         <a href="{{ base | append: '/' | relative_url }}" {% if page.url == '/' or page.url == '/zh/' %}class="active"{% endif %}>{{ nav_home }}</a>
+         <a href="{{ base | append: '/projects/' | relative_url }}" {% if page.url contains '/projects' %}class="active"{% endif %}>{{ nav_projects }}</a>
+diff --git a/assets/css/styles.css b/assets/css/styles.css
+index dfb25bd..f4ec313 100644
+--- a/assets/css/styles.css
++++ b/assets/css/styles.css
+@@ -111,24 +111,25 @@ h1, h2, h3, h4 {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+-  justify-content: flex-end;
+-  gap: 0.4rem 1.25rem;
++  justify-content: space-between;
++  gap: 0.4rem 1rem;
+   min-height: 3.5rem;
+ }
+ 
+ .site-title {
+-  font-size: 1.05rem;
+-  font-weight: 700;
+-  letter-spacing: -0.01em;
++  font-size: 1.02rem;
++  font-weight: 750;
++  letter-spacing: -0.015em;
+   color: var(--text);
+   white-space: nowrap;
++  margin-right: auto;
+ }
+ .site-title:hover { color: var(--accent); }
+ 
+ .site-nav {
+   display: flex;
+   flex-wrap: wrap;
+-  justify-content: flex-end;
++  justify-content: center;
+   gap: 0.1rem;
+ }
+ 
+@@ -248,7 +249,7 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ }
+ 
+ /* 首页版面更宽（两栏资料块 + 日期列表），文章页保持窄栏阅读宽度 */
+-.main-content-wide { max-width: 940px; }
++.main-content-wide { max-width: 920px; }
+ 
+ /* ---------- Hero (homepage) ---------- */
+ .hero { padding: 2.5rem 0 1rem; }
+@@ -317,7 +318,7 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ }
+ 
+ /* ---------- Ink divider ---------- */
+-.ink-divider { margin: 2.5rem 0; opacity: 0.55; }
++.ink-divider { margin: 1.9rem 0 0.4rem; opacity: 0.55; }
+ .ink-divider svg { display: block; width: 100%; height: 12px; }
+ .ink-divider path {
+   fill: none;
+@@ -347,14 +348,15 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ .button-ghost:hover { background: var(--bg-code); border-color: var(--accent); }
+ 
+ /* ---------- Sections on homepage ---------- */
+-.section { margin: 2.75rem 0; }
++.section { margin: 2.1rem 0; }
+ 
+ .section-head {
+   display: flex;
+   align-items: baseline;
+   justify-content: space-between;
+-  margin-bottom: 1rem;
+-  padding-bottom: 0.6rem;
++  gap: 1rem;
++  margin-bottom: 0.4rem;
++  padding-bottom: 0.55rem;
+   border-bottom: 1px solid var(--border);
+ }
+ .section-head h2, .page-head h1 { font-size: 1.45rem; margin: 0; }
+@@ -539,40 +541,48 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ /* ==========================================================================
+    Profile header (al-folio style: name, meta line, photo + bio)
+    ========================================================================== */
+-.profile { padding: 2rem 0 0; }
++.profile { padding: 1.6rem 0 0; }
+ 
+ .profile-name {
+-  margin: 0 0 1.85rem;
+-  font-size: clamp(2rem, 4.5vw, 2.7rem);
++  margin: 0 0 1.1rem;
++  font-size: clamp(1.9rem, 4vw, 2.5rem);
+   font-weight: 800;
+   letter-spacing: -0.03em;
+-  line-height: 1.1;
++  line-height: 1.12;
+ }
+ 
+ .profile-body {
+   display: grid;
+-  grid-template-columns: 1fr 270px;
+-  gap: 2.25rem;
+-  align-items: start;
++  grid-template-columns: minmax(0, 1fr) 236px;
++  gap: 2rem;
++  align-items: center;
+ }
+ 
+-.profile-photo { margin: 0; }
++.profile-photo { margin: 0; max-width: 236px; }
+ .profile-photo img {
+   display: block;
+   width: 100%;
+   /* 竖版人像比例，与原图一致，避免裁切；换图后如需方形改回 1 / 1 并调 object-position */
+-  aspect-ratio: 3 / 4;
++  aspect-ratio: 4 / 5;
+   object-fit: cover;
++  object-position: center 20%;
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
++  box-shadow: var(--shadow-card);
++  background: var(--bg-card);
+ }
+ 
++.profile-bio { max-width: 36em; }
+ .profile-bio > p {
+-  margin: 0 0 1.35rem;
+-  font-size: 1.05rem;
+-  line-height: 1.7;
++  margin: 0 0 1.1rem;
++  font-size: 1.02rem;
++  line-height: 1.68;
+   color: var(--text-secondary);
+ }
++.profile-bio > p strong, .profile-bio > p b { color: var(--text); font-weight: 650; }
++
++.profile-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 1rem 0 0; }
++.profile-links .button { padding: 0.5rem 1rem; font-size: 0.88rem; }
+ 
+ /* ==========================================================================
+    Date-aligned entry table
+@@ -587,17 +597,18 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ .entry-table tbody tr:last-child { border-bottom: none; }
+ 
+ .entry-table-date {
+-  width: 7.5rem;
+-  padding: 0.7rem 1rem 0.7rem 0;
++  width: 8.2rem;
++  padding: 0.62rem 1rem 0.62rem 0;
+   vertical-align: baseline;
+   text-align: left;
+-  font-size: 0.85rem;
++  font-size: 0.83rem;
+   font-weight: 400;
++  font-variant-numeric: tabular-nums;
+   color: var(--text-tertiary);
+   white-space: nowrap;
+ }
+ 
+-.entry-table-body { padding: 0.7rem 0; vertical-align: baseline; }
++.entry-table-body { padding: 0.62rem 0; vertical-align: baseline; line-height: 1.55; }
+ 
+ .prose a.entry-table-title {
+   color: var(--text);
+@@ -654,9 +665,9 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ .site-footer a { color: var(--text-secondary); }
+ .site-footer a:hover { color: var(--text); }
+ 
+-/* 页脚与正文同宽（正文 740px / 首页 940px），左右缘完全对齐 */
++/* 页脚与正文同宽（正文 740px / 首页 920px），左右缘完全对齐 */
+ .footer-inner { max-width: var(--reading); }
+-.footer-inner.main-content-wide { max-width: 940px; }
++.footer-inner.main-content-wide { max-width: 920px; }
+ 
+ /* 小字右对齐，与左侧题词形成编辑排版式的对角关系 */
+ .footer-copy { margin: 0; text-align: right; }
+@@ -690,7 +701,8 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+    Responsive
+    ========================================================================== */
+ @media (max-width: 700px) {
+-  .header-inner { padding-top: 0.6rem; padding-bottom: 0.2rem; }
++  .header-inner { padding-top: 0.6rem; padding-bottom: 0.45rem; row-gap: 0.5rem; }
++  .site-nav { order: 3; flex-basis: 100%; justify-content: flex-start; margin-left: -0.65rem; }
+   .main-content { padding-top: 1.8rem; }
+   .hero { padding-top: 1.5rem; }
+   .journal-list li { flex-direction: column; gap: 0.1rem; }
+diff --git a/index.md b/index.md
+index ea3c8f9..cdaa7fb 100644
+--- a/index.md
++++ b/index.md
+@@ -8,6 +8,10 @@ lang: en
+   <div class="profile-body">
+     <div class="profile-bio">
+       <p>I study supply chain operations at Wuhan University's School of Economics and Management — platform pricing, capacity allocation, and information disclosure when consumers behave strategically. Away from research: long-distance running, photography, and music.</p>
++      <div class="profile-links">
++        <a class="button" href="{{ '/research/' | relative_url }}">View research</a>
++        <a class="button button-ghost" href="{{ '/contact/' | relative_url }}">Get in touch</a>
++      </div>
+     </div>
+     <figure class="profile-photo">
+       <img src="{{ site.profile_image | relative_url }}" alt="{{ site.title }}" />
+@@ -34,6 +38,7 @@ lang: en
+ <section class="section">
+   <div class="section-head">
+     <h2>Latest posts</h2>
++    <a class="see-all" href="{{ '/thoughts/' | relative_url }}">All posts →</a>
+   </div>
+   {% include entry-table.html items=site.thoughts lang='en' limit=4 %}
+ </section>
+@@ -41,6 +46,7 @@ lang: en
+ <section class="section">
+   <div class="section-head">
+     <h2>Selected projects</h2>
++    <a class="see-all" href="{{ '/projects/' | relative_url }}">All projects →</a>
+   </div>
+   {% include entry-table.html items=site.projects lang='en' limit=3 %}
+ </section>
+diff --git a/zh/index.md b/zh/index.md
+index 360ba8b..6220ef1 100644
+--- a/zh/index.md
++++ b/zh/index.md
+@@ -9,6 +9,10 @@ lang: zh
+   <div class="profile-body">
+     <div class="profile-bio">
+       <p>在武汉大学经济与管理学院读物流管理（供应链运营试验班），研究平台供应链的定价、产能分配与信息披露，关注消费者策略行为下的机制设计。研究之外：长跑、摄影与音乐。</p>
++      <div class="profile-links">
++        <a class="button" href="{{ '/zh/research/' | relative_url }}">查看研究</a>
++        <a class="button button-ghost" href="{{ '/zh/contact/' | relative_url }}">联系我</a>
++      </div>
+     </div>
+     <figure class="profile-photo">
+       <img src="{{ site.profile_image | relative_url }}" alt="{{ site.title }}" />
+@@ -35,6 +39,7 @@ lang: zh
+ <section class="section">
+   <div class="section-head">
+     <h2>最新随笔</h2>
++    <a class="see-all" href="{{ '/zh/thoughts/' | relative_url }}">全部随笔 →</a>
+   </div>
+   {% include entry-table.html items=site.thoughts lang='zh' limit=4 %}
+ </section>
+@@ -42,6 +47,7 @@ lang: zh
+ <section class="section">
+   <div class="section-head">
+     <h2>精选项目</h2>
++    <a class="see-all" href="{{ '/zh/projects/' | relative_url }}">全部项目 →</a>
+   </div>
+   {% include entry-table.html items=site.projects lang='zh' limit=3 %}
+ </section>
