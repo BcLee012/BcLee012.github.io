@@ -99,6 +99,7 @@
   <footer class="site-footer">
     <div class="wrap footer-inner{% if content_wide %} main-content-wide{% endif %}">
       {% include quote-rotator.html %}
+      <div class="footer-rule" aria-hidden="true"></div>
       <div class="footer-bottom">
         <p class="footer-copy">© {{ "now" | date: "%Y" }} {{ site_name }} · <a href="{{ base | append: '/about/' | relative_url }}">{% if page.lang == 'zh' %}关于{% else %}About{% endif %}</a></p>
         <p class="footer-tech">{% if page.lang == 'zh' %}由 <a href="https://jekyllrb.com/">Jekyll</a> 驱动 · 托管于 <a href="https://pages.github.com/">GitHub Pages</a>{% else %}Powered by <a href="https://jekyllrb.com/">Jekyll</a> · Hosted on <a href="https://pages.github.com/">GitHub Pages</a>{% endif %}</p>

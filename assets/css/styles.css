@@ -679,14 +679,18 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
 .footer-inner.main-content-wide { max-width: 920px; }
 
 /* 底部两栏：左 © + 关于，右技术信息；窄屏自动换行 */
+/* 短线代替通栏分割线，与左对齐的短文字呼应，避免长线割裂 */
+.footer-rule {
+  width: 2.75rem;
+  border-top: 1px solid var(--border-strong);
+  margin: 0 0 0.7rem;
+}
 .footer-bottom {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 0.15rem 1rem;
-  padding-top: 0.65rem;
-  border-top: 1px solid var(--border);
 }
 .footer-copy { margin: 0; text-align: left; }
 .footer-tech { margin: 0; font-size: 0.78rem; color: var(--text-tertiary); }
