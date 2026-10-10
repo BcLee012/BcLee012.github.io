@@ -1,0 +1,127 @@
+diff --git a/_includes/quote-rotator.html b/_includes/quote-rotator.html
+index d3eb24c..582b955 100644
+--- a/_includes/quote-rotator.html
++++ b/_includes/quote-rotator.html
+@@ -10,7 +10,7 @@
+     {% if is_zh and q.zh and q.zh != '' %}{% assign text = q.zh %}{% endif %}
+     {% if text and text != '' %}
+     <blockquote class="quote-item{% if forloop.first %} is-active{% endif %}">
+-      <p class="quote-text">{{ text }}{% if q.author %} <span class="quote-author">— {{ q.author }}</span>{% endif %}</p>
++      <p class="quote-text" title="{{ text }}{% if q.author %} — {{ q.author }}{% endif %}">{{ text }}{% if q.author %} <span class="quote-author">— {{ q.author }}</span>{% endif %}</p>
+     </blockquote>
+     {% endif %}
+   {% endfor %}
+diff --git a/_layouts/default.html b/_layouts/default.html
+index d7ba870..082605f 100644
+--- a/_layouts/default.html
++++ b/_layouts/default.html
+@@ -99,7 +99,10 @@
+   <footer class="site-footer">
+     <div class="wrap footer-inner{% if content_wide %} main-content-wide{% endif %}">
+       {% include quote-rotator.html %}
+-      <p class="footer-copy">© {{ "now" | date: "%Y" }} {{ site_name }} · <a href="{{ base | append: '/about/' | relative_url }}">{% if page.lang == 'zh' %}关于{% else %}About{% endif %}</a> · {% if page.lang == 'zh' %}由 <a href="https://jekyllrb.com/">Jekyll</a> 驱动 · 托管于 <a href="https://pages.github.com/">GitHub Pages</a>{% else %}Powered by <a href="https://jekyllrb.com/">Jekyll</a> · Hosted on <a href="https://pages.github.com/">GitHub Pages</a>{% endif %}</p>
++      <div class="footer-bottom">
++        <p class="footer-copy">© {{ "now" | date: "%Y" }} {{ site_name }} · <a href="{{ base | append: '/about/' | relative_url }}">{% if page.lang == 'zh' %}关于{% else %}About{% endif %}</a></p>
++        <p class="footer-tech">{% if page.lang == 'zh' %}由 <a href="https://jekyllrb.com/">Jekyll</a> 驱动 · 托管于 <a href="https://pages.github.com/">GitHub Pages</a>{% else %}Powered by <a href="https://jekyllrb.com/">Jekyll</a> · Hosted on <a href="https://pages.github.com/">GitHub Pages</a>{% endif %}</p>
++      </div>
+     </div>
+   </footer>
+ 
+diff --git a/assets/css/styles.css b/assets/css/styles.css
+index f4ec313..0f5a12e 100644
+--- a/assets/css/styles.css
++++ b/assets/css/styles.css
+@@ -281,30 +281,39 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ .hero-links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+ 
+ /* ---------- Quote rotator (footer epigraph) ---------- */
++/* 单句显示 + 淡入，不再多句 grid 叠加交叉淡化，避免切换 0.65s 内两句重影 */
+ .quote-rotator {
+-  display: grid;
+-  /* 短句在「最长句子」预留的高度内垂直居中，避免文字贴顶、下方大片留白 */
+-  align-items: center;
++  display: block;
+   text-align: left;
+-  margin: 0 0 1.5rem;
++  margin: 0 0 0.65rem;
++  min-height: 1.65em;
+ }
+ 
+ .quote-item {
+-  grid-area: 1 / 1;
++  display: none;
+   margin: 0;
+-  opacity: 0;
+-  transform: translateY(8px);
+-  transition: opacity 0.65s ease, transform 0.65s ease;
+-  pointer-events: none;
+ }
+-.quote-item.is-active { opacity: 1; transform: none; pointer-events: auto; }
++.quote-item.is-active {
++  display: block;
++  animation: quote-in 0.4s ease;
++}
++
++@keyframes quote-in {
++  from { opacity: 0; transform: translateY(4px); }
++  to { opacity: 1; transform: none; }
++}
+ 
+ .quote-text {
+   margin: 0;
+-  font-size: 1rem;
++  font-size: 0.88rem;
+   font-style: italic;
+-  line-height: 1.65;
+-  color: var(--text-secondary);
++  line-height: 1.6;
++  color: var(--text-tertiary);
++  /* 页脚只占一行，超长用省略号，完整内容悬停可见 */
++  white-space: nowrap;
++  overflow: hidden;
++  text-overflow: ellipsis;
++  max-width: 100%;
+ }
+ 
+ .quote-author {
+@@ -314,7 +323,7 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ }
+ 
+ @media (prefers-reduced-motion: reduce) {
+-  .quote-item { transition: none; transform: none; }
++  .quote-item.is-active { animation: none; }
+ }
+ 
+ /* ---------- Ink divider ---------- */
+@@ -658,8 +667,8 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+    ========================================================================== */
+ .site-footer {
+   border-top: 1px solid var(--border);
+-  padding: 2.2rem 0 2.2rem;
+-  font-size: 0.85rem;
++  padding: 1.4rem 0 1.5rem;
++  font-size: 0.83rem;
+   color: var(--text-tertiary);
+ }
+ .site-footer a { color: var(--text-secondary); }
+@@ -669,8 +678,18 @@ html:not([data-theme="dark"]) .icon-moon { display: none; }
+ .footer-inner { max-width: var(--reading); }
+ .footer-inner.main-content-wide { max-width: 920px; }
+ 
+-/* 小字右对齐，与左侧题词形成编辑排版式的对角关系 */
+-.footer-copy { margin: 0; text-align: right; }
++/* 底部两栏：左 © + 关于，右技术信息；窄屏自动换行 */
++.footer-bottom {
++  display: flex;
++  flex-wrap: wrap;
++  align-items: baseline;
++  justify-content: space-between;
++  gap: 0.15rem 1rem;
++  padding-top: 0.65rem;
++  border-top: 1px solid var(--border);
++}
++.footer-copy { margin: 0; text-align: left; }
++.footer-tech { margin: 0; font-size: 0.78rem; color: var(--text-tertiary); }
+ 
+ /* 回到顶部按钮（滚动后出现） */
+ .back-to-top {

@@ -10,7 +10,7 @@
     {% if is_zh and q.zh and q.zh != '' %}{% assign text = q.zh %}{% endif %}
     {% if text and text != '' %}
     <blockquote class="quote-item{% if forloop.first %} is-active{% endif %}">
-      <p class="quote-text">{{ text }}{% if q.author %} <span class="quote-author">— {{ q.author }}</span>{% endif %}</p>
+      <p class="quote-text" title="{{ text }}{% if q.author %} — {{ q.author }}{% endif %}">{{ text }}{% if q.author %} <span class="quote-author">— {{ q.author }}</span>{% endif %}</p>
     </blockquote>
     {% endif %}
   {% endfor %}
